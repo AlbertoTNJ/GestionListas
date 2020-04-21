@@ -60,10 +60,11 @@
      android:layout_height="196dp"
      app:srcCompat="@drawable/futura"
      tools:layout_editor_absoluteX="32dp"
-     tools:layout_editor_absoluteY="16dp" />
+     tools:layout_editor_absoluteY="16dp"
+     tools:ignore="MissingConstraints" />
 
  <Button
-     android:id="@+id/btnSesion"
+     android:id="@+id/btnApertura"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
      android:layout_marginStart="32dp"
@@ -86,7 +87,7 @@
      app:layout_constraintEnd_toStartOf="@+id/imageButton"
      app:layout_constraintHorizontal_bias="1.0"
      app:layout_constraintStart_toStartOf="parent"
-     app:layout_constraintTop_toBottomOf="@+id/btnSesion"
+     app:layout_constraintTop_toBottomOf="@+id/btnApertura"
      app:srcCompat="@drawable/twitter" />
 
  <ImageButton
@@ -101,7 +102,7 @@
      app:layout_constraintEnd_toEndOf="parent"
      app:layout_constraintHorizontal_bias="0.494"
      app:layout_constraintStart_toStartOf="parent"
-     app:layout_constraintTop_toBottomOf="@+id/btnSesion"
+     app:layout_constraintTop_toBottomOf="@+id/btnApertura"
      app:srcCompat="@drawable/facebook" />
 
  <ImageButton
@@ -113,7 +114,7 @@
      android:background="@drawable/button_social"
      android:scaleType="fitCenter"
      app:layout_constraintStart_toEndOf="@+id/imageButton"
-     app:layout_constraintTop_toBottomOf="@+id/btnSesion"
+     app:layout_constraintTop_toBottomOf="@+id/btnApertura"
      app:srcCompat="@drawable/web" />
 
  <TextView
