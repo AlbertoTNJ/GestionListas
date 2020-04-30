@@ -117,13 +117,4 @@
      app:layout_constraintTop_toBottomOf="@+id/btnApertura"
      app:srcCompat="@drawable/web" />
 
- <TextView
-     android:id="@+id/WelcomeUser"
-     android:layout_width="match_parent"
-     android:layout_height="100dp"
-     android:background="@drawable/button_rounded"
-     android:text="Entrar"
-     app:layout_constraintBottom_toBottomOf="parent"
-     app:layout_constraintTop_toBottomOf="@+id/imageButton"
-     tools:layout_editor_absoluteX="105dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
