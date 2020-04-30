@@ -42,7 +42,7 @@ public class LoginAdmin extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), BienvenidoActivity.class);
                 startActivity(intent);
-                intent.putExtra("idUsuario", idUsuario);
+                intent.putExtra("idUsuario", adaptador);
             }
 
         });
@@ -50,7 +50,7 @@ public class LoginAdmin extends AppCompatActivity {
         new ListUsuarios().execute();
 
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(LoginAdmin.this, android.R.layout.simple_spinner_item, listaUsuarios);
-        spinnerUsuarios.setAdapter(adaptador);
+        valorItem = spinnerUsuarios.setAdapter(adaptador);
 
 
     }
