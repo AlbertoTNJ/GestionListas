@@ -25,7 +25,8 @@ public class LoginAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_admin);
 
-        final Spinner mSpinner = (Spinner) findViewById(R.id.mSpinner);
+        final Spinner spinnerUsuarios = (Spinner) findViewById(R.id.spinner);
+        Button btnSeleccionar = (Button) findViewById(R.id.btnSeleccionarUsuario);
         Button btnVolver = (Button) findViewById(R.id.btnVolver);
 
         btnVolver.setOnClickListener(new View.OnClickListener() {
@@ -36,29 +37,20 @@ public class LoginAdmin extends AppCompatActivity {
             }
 
         });
-        Integer idUsuario = getIntent().getIntExtra("idUsuario", 0);
-        String usuario = getIntent().getStringExtra("usuario");
-        String listaApertura = getIntent().getStringExtra("listaApertura");
-        String listaPorterillo = getIntent().getStringExtra("listaPorterillo");
+        btnSeleccionar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), BienvenidoActivity.class);
+                startActivity(intent);
+                intent.putExtra("idUsuario", idUsuario);
+            }
+
+        });
 
         new ListUsuarios().execute();
 
-        ArrayAdapter<String> adp = new ArrayAdapter<>(LoginAdmin.this, android.R.layout.simple_spinner_dropdown_item, listaUsuarios);
-
-        mSpinner.setAdapter(adp);
-
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String elemento = (String) mSpinner.getAdapter().getItem(position);
-                Toast.makeText(LoginAdmin.this,"Seleccionastes: "+elemento, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(LoginAdmin.this, android.R.layout.simple_spinner_item, listaUsuarios);
+        spinnerUsuarios.setAdapter(adaptador);
 
 
     }
