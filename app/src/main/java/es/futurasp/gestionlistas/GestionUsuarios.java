@@ -1,5 +1,7 @@
 package es.futurasp.gestionlistas;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,8 +12,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -19,68 +19,98 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class LoginAdmin extends AppCompatActivity {
-    //DECLARACION DE VARIABLES
+public class GestionUsuarios extends AppCompatActivity {
     ArrayList<String> listaUsuarios = new ArrayList<String>();
     public String itemSeleccionado = null;
+    Integer resBorrado = 0;
     Integer idUsuario;
     String usuario, pass, empresa, cif, listaApertura, listaPorterillo;
     Date ultimaConexion;
-    //MÉTODO ON CREATE
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_admin);
-        //ENLACE BOTONES Y SPINNER
-        final Spinner spinnerUsuarios = (Spinner) findViewById(R.id.mSpinner);
-        Button btnSeleccionar = (Button) findViewById(R.id.btnSeleccionarUsuario);
-        Button btnVolver = (Button) findViewById(R.id.btnVolver);
-        Button btnGestionUsuario = (Button) findViewById(R.id.btnGestionUsuario);
+        setContentView(R.layout.activity_gestion_usuarios);
 
-        //ACCION BOTON VOLVER
+    final Spinner spinnerUsuarios = (Spinner) findViewById(R.id.mSpinnerGestionUsuarios);
+    Button btnModificar = (Button) findViewById(R.id.btnModificarUsuario);
+    Button btnBorrar = (Button) findViewById(R.id.btnBorrarUsuario);
+    Button btnVolver = (Button) findViewById(R.id.btnVolver);
+
+    //ACCION BOTON VOLVER
         btnVolver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LoginAdmin.super.onBackPressed();
-            }
+        public void onClick(View view) {
+            GestionUsuarios.super.onBackPressed();
+        }
 
-        });
-        //ACCION BOTON SELECCIONAR
-        btnSeleccionar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //CONSULTO A LA BASE DE DATOS
-                new datosUsuarioSeleccionado().execute();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                //LLAMO AL ACTIVITY BIENVENIDO Y LE PASO EL VALOR DE LAS VARIABLES
-                Intent intent = new Intent(view.getContext(), BienvenidoActivity.class);
-                intent.putExtra("idUsuario", idUsuario);
-                intent.putExtra("usuario", usuario);
-                intent.putExtra("listaApertura", listaApertura);
-                intent.putExtra("listaPorterillo", listaPorterillo);
-                startActivity(intent);
+    });
+    //ACCION BOTON MODIFICAR
+        btnModificar.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            //CONSULTO A LA BASE DE DATOS
+            new GestionUsuarios.datosUsuarioSeleccionadoGestion().execute();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            //LLAMO AL ACTIVITY BIENVENIDO Y LE PASO EL VALOR DE LAS VARIABLES
+            Intent intent = new Intent(view.getContext(), BienvenidoActivity.class);
+            intent.putExtra("idUsuario", idUsuario);
+            intent.putExtra("usuario", usuario);
+            intent.putExtra("listaApertura", listaApertura);
+            intent.putExtra("listaPorterillo", listaPorterillo);
+            startActivity(intent);
+        }
 
-        });
-        new ListUsuarios().execute();
+    });
+        new GestionUsuarios.ListUsuarios().execute();
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //ACCION BOTON GESTION USUARIO
-        btnGestionUsuario.setOnClickListener(new View.OnClickListener() {
+//ACCION BOTON BORRAR
+        btnBorrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), GestionUsuarios.class);
-                startActivity(intent);
-            }
+                //CONSULTO LOS DATOS DEL USUARIO SELECCIONADO
+                new GestionUsuarios.datosUsuarioSeleccionadoGestion().execute();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // LLAMO AL MÉTODO PARA BORRAR USUARIO PASANDOLE EL VALOR DEL USUARIO SELECCIONADO
+                Toast.makeText(getApplicationContext(),
+                        "Borrando usuario seleccionado : " + itemSeleccionado, Toast.LENGTH_LONG).show();
+                new GestionUsuarios.borrarUsuario().execute();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (resBorrado==1){
+                    Toast.makeText(getApplicationContext(),
+                            "Usuario borrado", Toast.LENGTH_LONG).show();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    //REFRESCO EL ACTIVITY
+                    finish();
+                    startActivity(getIntent());
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),
+                            "Ops! Ha ocurrido algún error a la hora de borrar", Toast.LENGTH_LONG).show();
+                }
 
+
+            }
         });
+
         //CONFIGURACION DEL SPINNER
         final ArrayAdapter<String> adaptador = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, listaUsuarios);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -106,7 +136,6 @@ public class LoginAdmin extends AppCompatActivity {
             }
 
         });
-
 
     }
     //METODO PARA MOSTRAR LA LISTA DE USUARIOS EN EL SPINNER
@@ -137,7 +166,7 @@ public class LoginAdmin extends AppCompatActivity {
         }
     }
     //METODO PARA VER LOS DATOS DEL USUARIO SELECCIONADO
-    class datosUsuarioSeleccionado extends AsyncTask<Void, Void, Void> {
+    class datosUsuarioSeleccionadoGestion extends AsyncTask<Void, Void, Void> {
         String error = "";
 
         @Override
@@ -163,6 +192,27 @@ public class LoginAdmin extends AppCompatActivity {
                     listaPorterillo=resultSet.getString(8);
                 }
 
+
+            } catch (Exception e) {
+                //Guardo el error
+                error = e.toString();
+            }
+            return null;
+        }
+    }
+    class borrarUsuario extends AsyncTask<Void, Void, Void> {
+        String error = "";
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                //Configuracion de la conexión
+                Connection connection = DriverManager.getConnection("jdbc:mysql://185.155.63.198/db_android-cm", "CmAndrUser", "v5hfDugUpiWu");
+
+                Statement statement = connection.createStatement();
+                //Guardo en resultSet el resultado de la consulta
+                resBorrado = statement.executeUpdate("delete from usuarios where usuario= '"+itemSeleccionado+"'");
 
             } catch (Exception e) {
                 //Guardo el error

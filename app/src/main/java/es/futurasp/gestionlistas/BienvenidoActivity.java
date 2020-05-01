@@ -23,8 +23,9 @@ public class BienvenidoActivity extends AppCompatActivity {
         btnVolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
-                startActivity(intent);
+               /* Intent intent = new Intent(view.getContext(), MainActivity.class);
+                startActivity(intent);*/
+                BienvenidoActivity.super.onBackPressed();
             }
 
         });
