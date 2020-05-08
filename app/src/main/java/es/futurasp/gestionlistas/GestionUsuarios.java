@@ -35,6 +35,7 @@ public class GestionUsuarios extends AppCompatActivity {
     Button btnModificar = (Button) findViewById(R.id.btnModificarUsuario);
     Button btnBorrar = (Button) findViewById(R.id.btnBorrarUsuario);
     Button btnVolver = (Button) findViewById(R.id.btnVolver);
+    Button btnRegistrarUsuario = (Button) findViewById(R.id.btnRegistrarUsuario);
 
     //ACCION BOTON VOLVER
         btnVolver.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +44,16 @@ public class GestionUsuarios extends AppCompatActivity {
         }
 
     });
-    //ACCION BOTON MODIFICAR
+
+        //ACCION BOTON REGISTRAR
+        btnRegistrarUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), GestionUsuariosInsertar.class);
+                startActivity(intent);
+            }
+        });
+        //ACCION BOTON MODIFICAR
         btnModificar.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
