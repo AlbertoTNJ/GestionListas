@@ -2,17 +2,25 @@ package es.futurasp.gestionlistas;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 public class GestionUsuariosInsertar extends AppCompatActivity {
-    EditText txtInsEmpresa, txtInsPassword, txtInsCif;
+    EditText txtInsUsuario, txtInsEmpresa, txtInsPassword, txtInsCif;
     CheckBox checkListaApertura, checkListaPorterillo;
+    String marcadoApertura = "no";
+    String marcadoPorterillo = "no";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +29,8 @@ public class GestionUsuariosInsertar extends AppCompatActivity {
 
         Button btnVolver = (Button) findViewById(R.id.btnVolver);
         Button btnGuardar = (Button) findViewById(R.id.btnInsGuardar);
+
+        txtInsUsuario = (EditText) findViewById(R.id.txtInsUsuario);
         txtInsEmpresa = (EditText) findViewById(R.id.txtInsEmpresa);
         txtInsPassword = (EditText) findViewById(R.id.txtInsPassword);
         txtInsCif = (EditText) findViewById(R.id.txtInsCif);
@@ -37,65 +47,84 @@ public class GestionUsuariosInsertar extends AppCompatActivity {
 
         //ACCION BOTON GUARDAR
         btnGuardar.setOnClickListener(new View.OnClickListener() {
+
             public void onClick(View view) {
-                String verificaUser = txtInsEmpresa.getText().toString();
+
+                String verificaUser = txtInsUsuario.getText().toString();
                 String verificaPassword = txtInsPassword.getText().toString();
+                Integer tamPass = verificaPassword.length();
+                String verificaEmpresa = txtInsEmpresa.getText().toString();
                 String verificaCif = txtInsCif.getText().toString();
 
-                
-                /*final String[] verificaApertura = {"no"};
-                final String[] verificaPorterillo = {"no"};
 
-                checkListaApertura.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if(isChecked)
-                        {
-                            checkListaApertura.setTextColor(0xff00ff00);
-                            verificaApertura[0] = "si";
-                        }
-                    }
-                });
-                checkListaPorterillo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if(isChecked)
-                        {
-                            checkListaPorterillo.setTextColor(0xff00ff00);
-                            verificaPorterillo[0] = "si";
-                        }
-                    }
-                });*/
-
-
-                if (verificaUser.isEmpty()){
-                    txtInsEmpresa.setError("No se introdujo ninguna empresa");
-                }
-                else if (verificaPassword.isEmpty()){
+                if (verificaUser.isEmpty()) {
+                    txtInsUsuario.setError("No se introdujo ninguna usuario");
+                } else if (verificaPassword.isEmpty()) {
                     txtInsPassword.setError("No se introdujo ninguna contraseña");
-                }
-                else if (verificaCif.isEmpty()){
+                    tamPass = txtInsPassword.length();
+                } else if (tamPass < 4) {
+                    txtInsPassword.setError("La contraseña no puede ser menor a 4 dígitos");
+                } else if (verificaCif.isEmpty()) {
                     txtInsCif.setError("No se introdujo ningún CIF");
-                }
-                else if (verificaApertura[0]=="no" && verificaPorterillo[0]=="no"){
+                } else if (checkListaApertura.isChecked() == false && checkListaPorterillo.isChecked() == false) {
                     Toast.makeText(getApplicationContext(),
-                            "Debe seleccionar al menos 1 de ellos!", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),
-                            "Todo correcto", Toast.LENGTH_LONG).show();
-                }
+                            "Debe seleccionar al menos una de las listas!", Toast.LENGTH_LONG).show();
+                } else {
+                    if (checkListaApertura.isChecked() == true) {
+                        marcadoApertura = "si";
+                    }
+                    if (checkListaPorterillo.isChecked() == true) {
+                            marcadoPorterillo = "si";
+                    }
+                    new GestionUsuariosInsertar.insertarUsuarios().execute();
 
+                }
 
 
             }
 
         });
+    }
 
+    class insertarUsuarios extends AsyncTask<Void, Void, Void> {
+        String error = "";
 
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                //Configuracion de la conexión
+                Connection connection = DriverManager.getConnection("jdbc:mysql://185.155.63.198/db_android-cm", "CmAndrUser", "v5hfDugUpiWu");
 
+                Statement statement = connection.createStatement();
+                //Inserto usuario
+                int resultSet = statement.executeUpdate("insert into usuarios (usuario, pass, empresa, cif, listaApertura, listaPorterillo) values ('" + txtInsUsuario.getText().toString() + "', '" + txtInsPassword.getText().toString() + "', '" + txtInsPassword.getText().toString() + "','" + txtInsCif.getText().toString() + "', '" + marcadoApertura + "', '" + marcadoPorterillo + "');");
 
+            } catch (Exception e) {
+                //Guardo el error
+                error = e.toString();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            System.out.println(txtInsUsuario);
+            System.out.println(txtInsPassword);
+            System.out.println(txtInsEmpresa);
+            System.out.println(txtInsCif);
+            System.out.println(marcadoApertura);
+            System.out.println(marcadoPorterillo);
+            if (error == "") {
+                Toast.makeText(getApplicationContext(),
+                        "Usuario insertado correctamente", Toast.LENGTH_LONG).show();
+            } else {
+                System.out.println(error);
+                Toast.makeText(getApplicationContext(),
+                        "Ups!, hubo un problema al insertar el usuario", Toast.LENGTH_LONG).show();
+
+            }
+        }
     }
 }

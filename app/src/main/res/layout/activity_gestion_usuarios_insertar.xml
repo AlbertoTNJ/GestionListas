@@ -14,35 +14,53 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="16dp" />
+
     <Button
         android:id="@+id/btnVolver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
+        android:layout_marginStart="220dp"
         android:layout_marginTop="320dp"
-        android:layout_marginEnd="140dp"
+        android:layout_marginEnd="50dp"
         android:background="@drawable/button_rounded"
         android:text="Volver"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        android:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <EditText
+        android:id="@+id/txtInsUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="#26A69A"
+        android:ems="10"
+        android:hint="Usuario"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
     <EditText
         android:id="@+id/txtInsEmpresa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:backgroundTint="#26A69A"
         android:ems="10"
         android:hint="Empresa"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/txtInsUsuario" />
 
     <EditText
         android:id="@+id/txtInsPassword"
@@ -82,11 +100,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="180dp"
         android:text="Lista Apertura"
-        android:onClick="onCheckboxClicked"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtInsCif"
-        tools:ignore="OnClick" />
+        app:layout_constraintTop_toBottomOf="@+id/txtInsCif" />
 
     <CheckBox
         android:id="@+id/checkPorterillo"
@@ -95,23 +111,21 @@
         android:layout_marginStart="180dp"
         android:layout_marginTop="8dp"
         android:text="Lista Porterillo"
-        android:onClick="onCheckboxClicked"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtInsCif"
-        tools:ignore="OnClick" />
+        app:layout_constraintTop_toBottomOf="@+id/txtInsCif" />
 
     <Button
         android:id="@+id/btnInsGuardar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="140dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="320dp"
+        android:layout_marginEnd="220dp"
         android:background="@drawable/button_rounded"
         android:text="Guardar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtInsCif" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
